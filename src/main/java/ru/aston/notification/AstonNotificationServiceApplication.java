@@ -9,5 +9,4 @@ public class AstonNotificationServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(AstonNotificationServiceApplication.class, args);
     }
-
 }
