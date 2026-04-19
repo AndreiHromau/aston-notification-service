@@ -33,13 +33,40 @@ class UserEventListenerIntegrationTest {
 
     @Test
     void whenUserCreated_eventConsumed(CapturedOutput output) throws InterruptedException {
-        KafkaTemplate<String, UserEvent> kafkaTemplate = kafkaTemplate();
+        // given
+        String topic = "user-events";
+        String email = "test@mail.com";
+        String operation = "CREATE";
+        String expectedLogLine = "Consumed user event: operation=CREATE email=test@mail.com";
 
-        kafkaTemplate.send("user-events", "test@mail.com",
-                new UserEvent("CREATE", "test@mail.com"));
+        KafkaTemplate<String, UserEvent> kafkaTemplate = givenKafkaTemplate();
 
-        String expected = "Consumed user event: operation=CREATE email=test@mail.com";
-        long deadlineMs = System.currentTimeMillis() + 5000;
+        // when
+        whenUserEventSent(kafkaTemplate, topic, email, operation);
+
+        // then
+        thenLogLinePresentWithinTimeout(output, expectedLogLine, 5000);
+    }
+
+    private KafkaTemplate<String, UserEvent> givenKafkaTemplate() {
+        return kafkaTemplate();
+    }
+
+    private static void whenUserEventSent(
+            KafkaTemplate<String, UserEvent> kafkaTemplate,
+            String topic,
+            String email,
+            String operation
+    ) {
+        kafkaTemplate.send(topic, email, new UserEvent(operation, email));
+    }
+
+    private static void thenLogLinePresentWithinTimeout(
+            CapturedOutput output,
+            String expected,
+            long timeoutMs
+    ) throws InterruptedException {
+        long deadlineMs = System.currentTimeMillis() + timeoutMs;
         while (System.currentTimeMillis() < deadlineMs) {
             if (output.getOut().contains(expected) || output.getErr().contains(expected)) {
                 return;
