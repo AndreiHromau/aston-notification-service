@@ -23,7 +23,7 @@ public class KafkaConsumerConfig {
             @Value("${spring.kafka.consumer.group-id}") String groupId
     ) {
         JsonDeserializer<UserEvent> valueDeserializer = new JsonDeserializer<>(UserEvent.class);
-        valueDeserializer.addTrustedPackages("*");
+        valueDeserializer.addTrustedPackages("ru.aston.notification.kafka.dto");
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
