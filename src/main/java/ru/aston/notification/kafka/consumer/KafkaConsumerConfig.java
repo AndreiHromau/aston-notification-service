@@ -1,4 +1,4 @@
-package ru.aston.notification.kafka;
+package ru.aston.notification.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -9,6 +9,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import ru.aston.notification.kafka.dto.UserEvent;
 
 import java.util.HashMap;
 import java.util.Map;
